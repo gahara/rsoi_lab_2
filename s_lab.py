@@ -118,7 +118,7 @@ class AppCode(db.Model):
     timestamp = db.Column(db.DateTime)
     client_id = db.Column(ForeignKey("UserApp.id"), nullable=False)
     auth_id = db.Column(ForeignKey("authorization.id"))
-    lifetime_min = 2
+    lifetime_min = 10
     
     def __init__(self, UserApp):
         self.code = make_random_string(32)
@@ -571,10 +571,9 @@ def put_comment(comment_id):
                 return ok_200()
             else:
                 return err_403('Comment was deleted')
-            else:
-                return err_404()
         else:
-            return err_403()
+            return err_404()
+       
     return err_401('Not authorized or token expired')
 
 @app.route('/comments/<int:comment_id>', methods=['DELETE'])
@@ -591,8 +590,7 @@ def del_comment(comment_id):
             return ok_200()
         else:
             return err_404()
-        else:
-            return err_403()
+        
     return err_401('Not authorized or token expired')
 
 ### Other ###
